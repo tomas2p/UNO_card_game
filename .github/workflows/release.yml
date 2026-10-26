@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate tag, VERSION and CHANGELOG
+        run: sh scripts/check_version.sh "${GITHUB_REF_NAME}"
+
+      - name: Build
+        run: make
+
+      - name: Run tests
+        run: make test
+
+      - name: Show version
+        run: ./game_uno++ --version
+
+      - name: Package
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          name="uno++-${GITHUB_REF_NAME}-linux-x86_64"
+          mkdir -p "dist/${name}"
+          cp game_uno++ README.md CHANGELOG.md VERSION "dist/${name}/"
+          cp -r resources "dist/${name}/"
+          tar -C dist -czf "dist/${name}.tar.gz" "${name}"
+          (cd dist && sha256sum "${name}.tar.gz" > "${name}.tar.gz.sha256")
+
+          # release notes: only the section of this version
+          awk -v ver="${version}" '
+            $0 ~ "^## \\[" ver "\\]" { inside = 1; next }
+            inside && /^## \[/ { inside = 0 }
+            inside { print }
+          ' CHANGELOG.md > "dist/RELEASE_NOTES.md"
+          if [ ! -s "dist/RELEASE_NOTES.md" ]; then
+            echo "No hay notas para la versión ${version}" >&2
+            exit 1
+          fi
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            dist/*.tar.gz dist/*.sha256 \
+            --title "UNO++ ${GITHUB_REF_NAME#v}" \
+            --notes-file dist/RELEASE_NOTES.md

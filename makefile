@@ -24,7 +24,7 @@ TEST_SOURCES := $(TEST_DIR)/uno_test.cc \
                 $(SRC_DIR)/player_class.cc \
                 $(SRC_DIR)/game_class.cc
 
-.PHONY: all clean run test FORCE
+.PHONY: all clean run test check-version FORCE
 
 all: $(TARGET)
 
@@ -52,6 +52,10 @@ run: $(TARGET)
 
 test: $(BUILD_DIR)/uno_test
 	./$(BUILD_DIR)/uno_test
+
+# VERSION, CHANGELOG.md and release tag must agree
+check-version:
+	sh scripts/check_version.sh
 
 $(BUILD_DIR)/uno_test: $(TEST_SOURCES) $(BUILD_INFO) | $(BUILD_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TEST_SOURCES) -o $@
