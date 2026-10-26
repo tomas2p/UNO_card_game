@@ -15,6 +15,7 @@
 #include "card_pack_class.h"
 #include "game_class.h"
 #include "player_class.h"
+#include "version.h"
 
 namespace {
 
@@ -174,6 +175,14 @@ void TestPrint() {
   Check(pack.Print(0).empty(), "zero width prints nothing");
 }
 
+void TestVersion() {
+  Check(!uno::Version().empty(), "version is not empty");
+  Check(uno::VersionLine().rfind("UNO++ ", 0) == 0,
+        "version line starts with the program name");
+  Check(uno::VersionLine().find(uno::Version()) != std::string::npos,
+        "version line contains the version");
+}
+
 }  // namespace
 
 int main() {
@@ -184,6 +193,7 @@ int main() {
   TestGameSetup();
   TestGamesFinish();
   TestPrint();
+  TestVersion();
 
   if (failures == 0) {
     std::cout << "All tests passed.\n";

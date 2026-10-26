@@ -14,6 +14,7 @@
 
 #include "ansi_colors.h"
 #include "card_pack_class.h"
+#include "version.h"
 
 // print a section of file_name, delimited by "// section" markers
 void ReadArt(const std::string& file_name, const std::string& section) {
@@ -97,6 +98,7 @@ void EventFinish() {
 void EventInfo() {
   Clear();
   DisplayInfo();
+  std::cout << "\n  " << uno::VersionLine() << '\n';
   PressKey();
 }
 

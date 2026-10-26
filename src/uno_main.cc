@@ -9,9 +9,39 @@
  * @todo Online system: client/server connections
  */
 
-#include "uno_tools.h"
+#include <iostream>
+#include <string>
 
-int main() {
+#include "uno_tools.h"
+#include "version.h"
+
+namespace {
+
+void PrintUsage(const char* program) {
+  std::cout << "Uso: " << program << " [opción]\n\n"
+            << "Sin opciones inicia el juego.\n"
+            << "  -h, --help       muestra esta ayuda\n"
+            << "  -v, --version    muestra la versión del ejecutable\n";
+}
+
+}  // namespace
+
+int main(int argc, char** argv) {
+  for (int i{1}; i < argc; ++i) {
+    const std::string arg{argv[i]};
+    if (arg == "-v" || arg == "--version") {
+      std::cout << uno::VersionLine() << '\n';
+      return 0;
+    }
+    if (arg == "-h" || arg == "--help") {
+      PrintUsage(argv[0]);
+      return 0;
+    }
+    std::cerr << "Opción desconocida: " << arg << "\n\n";
+    PrintUsage(argv[0]);
+    return 1;
+  }
+
   // menu option
   int option{0};
 
