@@ -12,6 +12,15 @@
 Juego de UNO para terminal escrito en C++17. Incluye baraja completa, turnos,
 cartas especiales, IA, sistema de gritar UNO y reciclado del mazo de descarte.
 
+## Demo
+
+<div align="center">
+  <img src="docs/demo.gif" alt="Partida de UNO++ en la terminal contra la IA" width="689">
+</div>
+
+Partida real contra la IA: elegir carta, robar, gritar UNO++ y ganar. El
+[logo](docs/logo.svg) del principio es el mismo ASCII que muestra el juego.
+
 ## Versión
 
 La versión se define en el archivo `VERSION` y se incrusta en el binario junto
@@ -150,6 +159,7 @@ jugable, la opción `1` coge una del mazo.
 | `LICENSE` | texto de la GPL-3.0-or-later |
 | `resources/` | logo y textos por secciones |
 | `docs/logo.svg` | logo ASCII del README |
+| `docs/demo.gif` | partida de ejemplo grabada en la terminal |
 | `tests/uno_test.cc` | pruebas sin dependencias externas |
 | `scripts/check_version.sh` | coherencia entre `VERSION`, changelog y tag |
 | `.github/workflows/ci.yml` | CI con gcc, clang, tests y artefacto |

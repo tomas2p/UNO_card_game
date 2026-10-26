@@ -11,6 +11,7 @@ y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 - Licencia GPL-3.0-or-later.
 - Enlace al portfolio y firma `@tomas2p` en el logo del README.
+- Demo GIF del juego en el README.
 
 ## [1.0.0] - 2026-10-26
 
