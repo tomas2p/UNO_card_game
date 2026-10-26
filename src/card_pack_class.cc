@@ -11,26 +11,27 @@
 void CardPack::GeneratePack() {
   // generate the 0-9, +2, > <, XX cards
   for (int j{0}; j < 4; ++j) {
-    pack_.push_back(Card(j, 0));
+    const Color color{static_cast<Color>(j)};
+    pack_.emplace_back(color, Type::Zero);
     for (int k{1}; k <= 12; ++k) {
       for (int i{0}; i < 2; ++i) {
-        pack_.push_back(Card(j, k));
+        pack_.emplace_back(color, static_cast<Type>(k));
       }
     }
   }
   // generate the <> card
   for (int i{0}; i < 8; ++i) {
-    pack_.push_back(Card(4, 13));
+    pack_.emplace_back(Color::Wild, Type::Wild);
   }
   // generate the +4 card
   for (int i{0}; i < 4; ++i) {
-    pack_.push_back(Card(4, 14));
+    pack_.emplace_back(Color::Wild, Type::WildDrawFour);
   }
 }
 
 // generate pack_color_
 void CardPack::GeneratePackColor() {
-  for (int i{0}; i < kSize_; ++i) {
+  for (std::size_t i{0}; i < kSize_; ++i) {
     std::string pack_color{pack_[i].color_display() + "    " + reset};
     pack_color_.push_back(pack_color);
   }
@@ -75,19 +76,23 @@ void CardPack::push_back(const Card& card_type, const std::string& card_color) {
 }
 
 // print cards until width
-std::string CardPack::Print(const int& width) {
+std::string CardPack::Print(const std::size_t width) {
+  if (width == 0) {
+    return "";
+  }
   std::string out;
-  for (int i{0}; i < pack_.size() && i < pack_color_.size(); i += width) {
-    for (int j{i}; (j < i + width) && (j < pack_color_.size()); ++j) {
+  for (std::size_t i{0}; i < pack_.size() && i < pack_color_.size();
+       i += width) {
+    for (std::size_t j{i}; (j < i + width) && (j < pack_color_.size()); ++j) {
       out.append(pack_color_[j] + " ");
     }
     out.append("\n");
-    for (int j{i}; (j < i + width) && (j < pack_.size()); ++j) {
+    for (std::size_t j{i}; (j < i + width) && (j < pack_.size()); ++j) {
       out.append(pack_[j].Print());
       out.append(" ");
     }
     out.append("\n");
-    for (int j{i}; (j < i + width) && (j < pack_color_.size()); ++j) {
+    for (std::size_t j{i}; (j < i + width) && (j < pack_color_.size()); ++j) {
       out.append(pack_color_[j] + " ");
     }
     out.append("\n\n");
@@ -127,22 +132,21 @@ std::string CardPack::PrintGameTable() {
 void CardPack::ShufflePack() {
   std::mt19937 rgn(std::random_device{}());
   std::shuffle(pack_.begin(), pack_.end(), rgn);
-  for (int i{0}; i < pack_.size(); ++i) {
+  for (std::size_t i{0}; i < pack_.size(); ++i) {
     pack_color_[i] = (pack_[i].color_display() + "    " + reset);
   }
 }
 
 // check if the card to put is valid
-bool CardPack::Check(Card& card) {
-  bool value;
-  if (pack_.back().type() == card.type()) {
-    value = true;
-  } else if (pack_.back().color() == card.color()) {
-    value = true;
-  } else if (card.color() == 4) {
-    value = true;
-  } else {
-    value = false;
+bool CardPack::Check(const Card& card) const {
+  if (pack_.empty()) {
+    return false;
   }
-  return value;
+  if (pack_.back().type() == card.type()) {
+    return true;
+  }
+  if (pack_.back().color() == card.color()) {
+    return true;
+  }
+  return card.color() == Color::Wild;
 }

@@ -37,7 +37,7 @@ void Player::CardGlobalToPlayerByIndex(CardPack& global_pack,
 }
 
 // select the color for the special card
-int SpecialCardColorPicker() {
+Color SpecialCardColorPicker() {
   int option{0};
   while (option < 1 || option > 4) {
     std::cout << "  - Color disponibles para cambiar:\n";
@@ -51,15 +51,14 @@ int SpecialCardColorPicker() {
       std::cout << " Color inválido.\n";
     }
   }
-  return (option - 1);
+  return static_cast<Color>(option - 1);
 }
 
 // put card from player_card_pack to global_card_pack
 void Player::CardPlayerToGlobalByIndex(CardPack& global_pack,
                                        const int& index) {
-  if (card_pack_[index].color() == 4) {
-    int new_color{SpecialCardColorPicker()};
-    card_pack_[index].color(new_color);
+  if (card_pack_[index].color() == Color::Wild) {
+    card_pack_[index].color(SpecialCardColorPicker());
     color_pack_[index] = card_pack_[index].color_display() + "    " + reset;
   }
   // append card to global card_pack
@@ -73,19 +72,23 @@ void Player::CardPlayerToGlobalByIndex(CardPack& global_pack,
 }
 
 // print the card_pack
-std::string Player::Print(const int& width) {
+std::string Player::Print(const std::size_t width) {
+  if (width == 0) {
+    return "";
+  }
   std::string out;
-  for (int i{0}; i < card_pack_.size() && i < color_pack_.size(); i += width) {
-    for (int j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
+  for (std::size_t i{0}; i < card_pack_.size() && i < color_pack_.size();
+       i += width) {
+    for (std::size_t j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
       out.append(color_pack_[j] + " ");
     }
     out.append("\n");
-    for (int j{i}; (j < i + width) && (j < card_pack_.size()); ++j) {
+    for (std::size_t j{i}; (j < i + width) && (j < card_pack_.size()); ++j) {
       out.append(card_pack_[j].Print());
       out.append(" ");
     }
     out.append("\n");
-    for (int j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
+    for (std::size_t j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
       out.append(color_pack_[j] + " ");
     }
     out.append("\n\n");

@@ -7,29 +7,26 @@
 
 #include "card_class.h"
 
+const std::array<std::string_view, 5> Card::kColors{BREDB, BBLUB, BGRNB,
+                                                     BYELB, BWHTB};
+
+const std::array<std::string_view, 15> Card::kTypes{
+    BBLK "00", BBLK "01", BBLK "02", BBLK "03", BBLK "04",
+    BBLK "05", BBLK "06", BBLK "07", BBLK "08", BBLK "09",
+    BBLK "+2", BBLK "><", BBLK "XX", BBLK "<>", BBLK "+4"};
+
 // constructor
-Card::Card(int color, int type) {
-  color_ = color;
-  type_ = type;
-}
+Card::Card(Color color, Type type) : color_{color}, type_{type} {}
 
 // print card
-std::string Card::Print() {
-  return (kColors_[color_] + ' ' + kTypes_[type_] + ' ' + reset);
+std::string Card::Print() const {
+  return color_display() + ' ' + type_display() + ' ' + reset;
 }
 
 // operator<< overload
 std::ostream& operator<<(std::ostream& out, const Card& card) {
-  out << card.kColors_[card.color_] + ' ' + card.kTypes_[card.type_] + ' ';
-  out << reset;
+  out << card.Print();
   return out;
-}
-
-// operator= overload
-Card& Card::operator=(const Card& card) {
-  color_ = card.color_;
-  type_ = card.type_;
-  return *this;
 }
 
 // operator== overload
@@ -37,14 +34,10 @@ bool Card::operator==(const Card& card) const {
   return (type_ == card.type_ && color_ == card.color_);
 }
 
-// swap function
-void swap(Card& card1, Card& card2) {
-  int temp_color{card1.color_}, temp_type{card1.type_};
-  card1.color_ = card2.color_;
-  card1.type_ = card2.type_;
-  card2.color_ = temp_color;
-  card2.type_ = temp_type;
+std::string Card::color_display() const {
+  return std::string(kColors[static_cast<std::size_t>(color_)]);
 }
 
-// erase function
-void erase(const int& index) {}
+std::string Card::type_display() const {
+  return std::string(kTypes[static_cast<std::size_t>(type_)]);
+}

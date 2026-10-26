@@ -44,13 +44,13 @@ class CardPack {
   void push_back(const Card& card_type, const std::string& card_color);
 
   // print cards until width
-  std::string Print(const int& width);
+  std::string Print(const std::size_t width);
   
   // print the game table (backcard and las card in pack)
   std::string PrintGameTable();
 
   // check if card to put is valid
-  bool Check(Card& card);
+  bool Check(const Card& card) const;
 
   // getters
   std::size_t size() const { return pack_.size(); }
@@ -59,7 +59,7 @@ class CardPack {
   std::vector<std::string> pack_color() const { return pack_color_; }
 
  private:
-  const int kSize_{112};
+  static constexpr std::size_t kSize_{4 * (1 + 12 * 2) + 8 + 4};
   std::vector<Card> pack_;
   std::vector<std::string> pack_color_;
 };

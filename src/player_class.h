@@ -31,7 +31,7 @@ class Player {
   void CardPlayerToGlobalByIndex(CardPack& global_pack, const int& index);
 
   // print cards until width
-  std::string Print(const int& width);
+  std::string Print(const std::size_t width);
 
   // getters
   std::string name() const { return name_; }

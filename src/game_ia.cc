@@ -67,7 +67,7 @@ void EventIAGame() {
   std::size_t first_card{0};
   std::vector<Card> initial_pack{card_pack.pack()};
   while (first_card < initial_pack.size() &&
-         initial_pack[first_card].type() > 9) {
+         initial_pack[first_card].type() > Type::Nine) {
     ++first_card;
   }
   game_card_pack.push_back(initial_pack[first_card],
@@ -135,7 +135,7 @@ void EventIAGame() {
           card_index = CardIndex(players[0].card_pack().size());
           Card card{players[0].card_pack()[card_index]};
           if (game_card_pack.Check(card)) {
-            const bool is_reverse{card.type() == 11};
+            const bool is_reverse{card.type() == Type::Reverse};
             players[0].CardPlayerToGlobalByIndex(game_card_pack, card_index);
             if (is_reverse) {
               std::reverse(players_name.begin(), players_name.end());

@@ -5,55 +5,71 @@
  * @file card_class.h
  */
 
-#include <iostream>
-#include <string>
-
-#include "ANSI-color-codes.h"
-
-// Class for manage the card
 #ifndef CARD_CLASS_H
 #define CARD_CLASS_H
 
+#include <array>
+#include <cstddef>
+#include <iostream>
+#include <string>
+#include <string_view>
+
+#include "ANSI-color-codes.h"
+
+// Card colors; Wild is only used by <>, +4
+enum class Color { Red = 0, Blue, Green, Yellow, Wild };
+
+// Card types, in display order
+enum class Type {
+  Zero = 0,
+  One,
+  Two,
+  Three,
+  Four,
+  Five,
+  Six,
+  Seven,
+  Eight,
+  Nine,
+  DrawTwo,
+  Reverse,
+  Skip,
+  Wild,
+  WildDrawFour
+};
+
+// Class for manage the card
 class Card {
  public:
   // constructor
-  Card(int color, int type);
+  Card(Color color, Type type);
 
   // operator<< overload
   friend std::ostream& operator<<(std::ostream&, const Card&);
-  // operator= overload
-  Card& operator=(const Card& card);
   // operator== overload
   bool operator==(const Card& card) const;
 
-  // swap function
-  friend void swap(Card& card1, Card& card2);
-  // erase function
-  friend void erase(const int& index);
-
   // print card
-  std::string Print();
+  std::string Print() const;
 
   // getters
-  int color() { return color_; }
-  int type() { return type_; }
-  std::string color_display() { return kColors_[color_]; }
-  std::string type_display() { return kTypes_[type_]; }
+  Color color() const { return color_; }
+  Type type() const { return type_; }
+  std::string color_display() const;
+  std::string type_display() const;
 
   // setters
-  void color(int color) { color_ = color; }
+  void color(Color color) { color_ = color; }
 
  private:
   // background colors: red, blue, green, yellow, white
-  const std::string kColors_[5] = {BREDB, BBLUB, BGRNB, BYELB, BWHTB};
+  static const std::array<std::string_view, 5> kColors;
   // numbers 0-9; plus +2, +4; change direccion ><; change color <>; block XX
-  const std::string kTypes_[15] = {BBLK "00", BBLK "01", BBLK "02", BBLK "03",
-                                   BBLK "04", BBLK "05", BBLK "06", BBLK "07",
-                                   BBLK "08", BBLK "09", BBLK "+2", BBLK "><",
-                                   BBLK "XX", BBLK "<>", BBLK "+4"};
-  // eassy to implement by index of the const string with the similar name
-  int color_;
-  int type_;
+  static const std::array<std::string_view, 15> kTypes;
+
+  // easy to implement by index of the const string with the similar name
+  Color color_;
+  Type type_;
 };
 
 #endif
