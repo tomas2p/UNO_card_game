@@ -76,4 +76,7 @@ class Card {
 // format a group of cards, width cards per row
 std::string FormatCards(const std::vector<Card>& cards, std::size_t width);
 
+// human-readable color name
+std::string ColorName(Color color);
+
 #endif

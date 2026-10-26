@@ -60,6 +60,13 @@ std::string Card::type_display() const {
   return out;
 }
 
+// human-readable color name
+std::string ColorName(Color color) {
+  static const std::array<std::string_view, 5> kNames{
+      "rojo", "azul", "verde", "amarillo", "comodín"};
+  return std::string(kNames[static_cast<std::size_t>(color)]);
+}
+
 // format a group of cards, width cards per row
 std::string FormatCards(const std::vector<Card>& cards, std::size_t width) {
   if (width == 0) {

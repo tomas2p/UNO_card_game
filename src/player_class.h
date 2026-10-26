@@ -21,10 +21,10 @@ class Player {
   // constructor for ia game
   explicit Player(std::string name);
 
-  // put card from global_card_pack to player_card_pack
-  void CardGlobalToPlayerByIndex(CardPack& global_pack, std::size_t index);
-  // put card from player_card_pack to global_card_pack
-  void CardPlayerToGlobalByIndex(CardPack& global_pack, std::size_t index);
+  // draw count cards from the top of deck
+  void DrawFrom(CardPack& deck, std::size_t count = 1);
+  // move the card at index from the hand to the discard pile
+  void PlayTo(CardPack& discard, std::size_t index);
 
   // print cards until width
   std::string Print(std::size_t width) const;
@@ -34,10 +34,6 @@ class Player {
   const std::string& ip() const { return ip_; }
   int port() const { return port_; }
   const CardPack& hand() const { return hand_; }
-  int turn() const { return turn_; }
-
-  // setters
-  void turn(int turn) { turn_ = turn; }
 
  private:
   std::string name_;
@@ -46,8 +42,6 @@ class Player {
   int port_{0};
   // cards in the player's hand
   CardPack hand_;
-  // turn of the player in game
-  int turn_{0};
 };
 
 #endif
