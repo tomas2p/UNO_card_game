@@ -1,0 +1,194 @@
+/**
+ * @author Tomás Pino Pérez
+ * @brief Lightweight tests for cards, deck, player and game rules
+ * @date 09-02-2023
+ * @file uno_test.cc
+ */
+
+#include <cstddef>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "card_class.h"
+#include "card_pack_class.h"
+#include "game_class.h"
+#include "player_class.h"
+
+namespace {
+
+int failures{0};
+
+void Check(bool condition, const std::string& message) {
+  if (!condition) {
+    std::cerr << "FAIL: " << message << '\n';
+    ++failures;
+  }
+}
+
+std::size_t CountType(const CardPack& pack, Type type) {
+  std::size_t count{0};
+  for (const Card& card : pack.pack()) {
+    if (card.type() == type) {
+      ++count;
+    }
+  }
+  return count;
+}
+
+std::size_t CountColor(const CardPack& pack, Color color) {
+  std::size_t count{0};
+  for (const Card& card : pack.pack()) {
+    if (card.color() == color) {
+      ++count;
+    }
+  }
+  return count;
+}
+
+std::size_t TotalCards(const Game& game) {
+  std::size_t total{game.deck_size() + game.discard().size()};
+  for (const Player& player : game.players()) {
+    total += player.hand().size();
+  }
+  return total;
+}
+
+void TestCards() {
+  const Card red_five{Color::Red, Type::Five};
+  const Card other_red_five{Color::Red, Type::Five};
+  const Card blue_five{Color::Blue, Type::Five};
+
+  Check(red_five == other_red_five, "cards with same color and type are equal");
+  Check(!(red_five == blue_five), "cards with different color are not equal");
+  Check(red_five.color() == Color::Red, "card keeps its color");
+  Check(red_five.type() == Type::Five, "card keeps its type");
+  Check(!red_five.color_display().empty(), "card has a color display");
+  Check(!red_five.type_display().empty(), "card has a type display");
+  Check(ColorName(Color::Wild) == "comodín", "wild color name");
+}
+
+void TestFullDeck() {
+  const CardPack deck{CardPack::FullDeck()};
+
+  Check(deck.size() == 112, "deck has 112 cards");
+  Check(CountType(deck, Type::Zero) == 4, "one zero per color");
+  Check(CountType(deck, Type::DrawTwo) == 8, "two +2 per color");
+  Check(CountType(deck, Type::Wild) == 8, "eight wild cards");
+  Check(CountType(deck, Type::WildDrawFour) == 4, "four +4 cards");
+  Check(CountColor(deck, Color::Wild) == 12, "twelve wild cards");
+  for (int type{static_cast<int>(Type::One)};
+       type <= static_cast<int>(Type::Skip); ++type) {
+    Check(CountType(deck, static_cast<Type>(type)) == 8,
+          "two action cards per color");
+  }
+}
+
+void TestCanPlay() {
+  CardPack discard;
+  discard.push_back(Card(Color::Red, Type::Five));
+
+  Check(discard.CanPlay(Card(Color::Red, Type::Nine)),
+        "same color is playable");
+  Check(discard.CanPlay(Card(Color::Blue, Type::Five)),
+        "same type is playable");
+  Check(discard.CanPlay(Card(Color::Wild, Type::Wild)),
+        "wild card is always playable");
+  Check(!discard.CanPlay(Card(Color::Blue, Type::Nine)),
+        "different color and type is not playable");
+
+  const CardPack empty;
+  Check(!empty.CanPlay(Card(Color::Red, Type::Five)),
+        "nothing is playable on an empty pile");
+}
+
+void TestPlayer() {
+  CardPack deck{CardPack::FullDeck()};
+  CardPack discard;
+  Player player{"Test"};
+
+  player.DrawFrom(deck, 7);
+  Check(player.hand().size() == 7, "player draws seven cards");
+  Check(deck.size() == 105, "draw removes cards from the deck");
+
+  const Card played{player.hand()[0]};
+  player.PlayTo(discard, 0);
+  Check(player.hand().size() == 6, "play removes the card from the hand");
+  Check(discard.size() == 1, "play moves the card to the discard pile");
+  Check(discard.top() == played, "played card is on top of the discard pile");
+}
+
+void TestGameSetup() {
+  std::vector<Player> players;
+  players.emplace_back("Humano");
+  players.emplace_back("IA_1");
+  Game game{std::move(players)};
+
+  Check(!game.over(), "new game is running");
+  Check(game.players().size() == 2, "game keeps its players");
+  for (const Player& player : game.players()) {
+    Check(player.hand().size() == 7, "every player starts with seven cards");
+  }
+  Check(game.discard().size() == 1, "one card starts on the discard pile");
+  Check(game.deck_size() == 112 - 14 - 1, "deck keeps the remaining cards");
+  Check(game.discard().top().type() <= Type::Nine,
+        "game starts with a number card");
+  Check(game.current_index() == 0, "human starts");
+  Check(game.current_color() == game.discard().top().color(),
+        "current color matches the first card");
+}
+
+void TestGamesFinish() {
+  for (std::size_t num_players{2}; num_players <= 8; ++num_players) {
+    for (int trial{0}; trial < 20; ++trial) {
+      std::vector<Player> players;
+      players.reserve(num_players);
+      for (std::size_t i{0}; i < num_players; ++i) {
+        players.emplace_back(i == 0 ? "Humano"
+                                    : "IA_" + std::to_string(i));
+      }
+      Game game{std::move(players)};
+
+      std::size_t steps{0};
+      while (!game.over() && steps < 20000) {
+        Check(TotalCards(game) == 112, "no card is lost during a game");
+        game.AiTurn();
+        ++steps;
+      }
+      Check(game.over(), "game always ends");
+      Check(!game.winner().empty(), "game always has a winner");
+      Check(TotalCards(game) == 112, "no card is lost at the end");
+    }
+  }
+}
+
+void TestPrint() {
+  CardPack pack;
+  pack.push_back(Card(Color::Red, Type::Zero));
+  pack.push_back(Card(Color::Blue, Type::One));
+  const std::string out{pack.Print(2)};
+
+  Check(!out.empty(), "printing a pack produces output");
+  Check(out.find("00") != std::string::npos, "printed pack shows card types");
+  Check(pack.Print(0).empty(), "zero width prints nothing");
+}
+
+}  // namespace
+
+int main() {
+  TestCards();
+  TestFullDeck();
+  TestCanPlay();
+  TestPlayer();
+  TestGameSetup();
+  TestGamesFinish();
+  TestPrint();
+
+  if (failures == 0) {
+    std::cout << "All tests passed.\n";
+    return 0;
+  }
+  std::cerr << failures << " test(s) failed.\n";
+  return 1;
+}
