@@ -29,6 +29,7 @@ void Game::Start() {
   }
   deck_ = CardPack::FullDeck();
   deck_.ShufflePack();
+  uno_shouted_.assign(players_.size(), false);
 
   for (std::size_t round{0}; round < kHandSize; ++round) {
     for (std::size_t i{0}; i < players_.size(); ++i) {
@@ -93,6 +94,18 @@ bool Game::Play(std::size_t index, Color chosen_color) {
     return true;
   }
 
+  // playing down to one card without shouting UNO costs two cards
+  const bool penalty{
+      NeedsUnoPenalty(players_[current_].hand().size(),
+                      current_ < uno_shouted_.size() && uno_shouted_[current_])};
+  if (current_ < uno_shouted_.size()) {
+    uno_shouted_[current_] = false;
+  }
+  if (penalty) {
+    DrawCards(current_, 2);
+    notice_ = players_[current_].name() + " no gritó UNO y roba 2 cartas.";
+  }
+
   switch (card.type()) {
     case Type::Reverse:
       direction_ = -direction_;
@@ -127,6 +140,10 @@ void Game::Draw() {
     return;
   }
   DrawCards(current_, 1);
+  // a fresh card means the UNO situation is gone
+  if (current_ < uno_shouted_.size()) {
+    uno_shouted_[current_] = false;
+  }
   AdvanceTurn();
 }
 
@@ -135,12 +152,41 @@ void Game::AiTurn() {
   if (over_) {
     return;
   }
+  // the AI always shouts when it is about to play its second-to-last card
+  if (players_[current_].hand().size() == 2) {
+    ShoutUno();
+  }
   const std::size_t index{AiChooseCard()};
   if (index == kNoCard) {
     Draw();
     return;
   }
   Play(index, AiChooseColor());
+}
+
+// shout UNO; only valid with one or two cards left
+bool Game::ShoutUno() {
+  if (over_ || players_.empty()) {
+    return false;
+  }
+  const std::size_t hand_size{players_[current_].hand().size()};
+  if (hand_size < 1 || hand_size > 2) {
+    return false;
+  }
+  if (current_ < uno_shouted_.size()) {
+    uno_shouted_[current_] = true;
+  }
+  if (human_turn()) {
+    notice_ = players_[current_].name() + " grita ¡UNO++!";
+  }
+  return true;
+}
+
+// take the message of the last action (empty when there is nothing to say)
+std::string Game::TakeNotice() {
+  std::string notice;
+  notice.swap(notice_);
+  return notice;
 }
 
 // first playable non-wild card, then the first playable wild card

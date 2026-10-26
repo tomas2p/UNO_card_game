@@ -140,6 +140,88 @@ void TestGameSetup() {
         "current color matches the first card");
 }
 
+void TestUnoCall() {
+  Check(!NeedsUnoPenalty(0, false), "an empty hand needs no penalty");
+  Check(NeedsUnoPenalty(1, false), "one card without a shout needs the penalty");
+  Check(!NeedsUnoPenalty(1, true), "one card after shouting is fine");
+  Check(!NeedsUnoPenalty(2, false), "two cards do not need a shout yet");
+  Check(!NeedsUnoPenalty(2, true), "two cards after shouting are fine");
+
+  std::vector<Player> players;
+  players.emplace_back("Humano");
+  players.emplace_back("IA_1");
+  Game game{std::move(players)};
+
+  Check(!game.ShoutUno(), "cannot shout UNO with seven cards");
+  Check(game.players()[0].hand().size() == 7,
+        "shouting does not change the hand");
+}
+
+std::size_t FirstPlayable(const Game& game) {
+  for (std::size_t i{0}; i < game.current_player().hand().size(); ++i) {
+    if (game.CanPlay(i)) {
+      return i;
+    }
+  }
+  return Game::kNoCard;
+}
+
+void PlayOrDraw(Game& game) {
+  const std::size_t index{FirstPlayable(game)};
+  if (index == Game::kNoCard) {
+    game.Draw();
+  } else {
+    game.Play(index);
+  }
+}
+
+void TestUnoPenalty() {
+  bool shouted_ok{false};
+  bool silent_ok{false};
+
+  for (int trial{0}; trial < 300 && !(shouted_ok && silent_ok); ++trial) {
+    std::vector<Player> players;
+    players.emplace_back("Humano");
+    players.emplace_back("IA_1");
+    Game game{std::move(players)};
+    const bool shout{trial % 2 == 0};
+
+    while (!game.over()) {
+      if (game.current_index() != 0) {
+        game.AiTurn();
+        continue;
+      }
+      if (game.players()[0].hand().size() != 2) {
+        PlayOrDraw(game);
+        continue;
+      }
+
+      // the human is about to play its second-to-last card
+      if (shout) {
+        Check(game.ShoutUno(), "shouting UNO with two cards works");
+      }
+      const std::size_t index{FirstPlayable(game)};
+      if (index == Game::kNoCard) {
+        game.Draw();
+        continue;
+      }
+      game.Play(index);
+      const std::size_t after{game.players()[0].hand().size()};
+      if (shout) {
+        Check(after == 1, "shouting UNO avoids the penalty");
+        shouted_ok = true;
+      } else {
+        Check(after == 3, "not shouting UNO costs two cards");
+        silent_ok = true;
+      }
+      break;
+    }
+  }
+
+  Check(shouted_ok, "a game reached the UNO situation with a shout");
+  Check(silent_ok, "a game reached the UNO situation without a shout");
+}
+
 void TestGamesFinish() {
   for (std::size_t num_players{2}; num_players <= 8; ++num_players) {
     for (int trial{0}; trial < 20; ++trial) {
@@ -191,6 +273,8 @@ int main() {
   TestCanPlay();
   TestPlayer();
   TestGameSetup();
+  TestUnoCall();
+  TestUnoPenalty();
   TestGamesFinish();
   TestPrint();
   TestVersion();

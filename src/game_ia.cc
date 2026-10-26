@@ -53,7 +53,7 @@ Color AskColor() {
 }
 
 // draw the whole game state
-void RenderGame(const Game& game) {
+void RenderGame(Game& game) {
   Clear();
   std::cout << "\n Jugando al UNO++ contra " << game.players().size() - 1
             << " IAs\n";
@@ -74,12 +74,20 @@ void RenderGame(const Game& game) {
   std::cout << "\n  Color actual: " << ColorName(game.current_color())
             << "   |   Cartas en el mazo: " << game.deck_size() << "\n\n";
 
+  const std::string notice{game.TakeNotice()};
+  if (!notice.empty()) {
+    std::cout << "  " << notice << "\n\n";
+  }
+
   const Player& human{game.players()[0]};
   std::cout << " Tu baraja (" << human.hand().size() << " cartas):\n"
             << human.Print(kHandWidth);
 
   if (!game.human_turn()) {
     std::cout << " Turno de " << game.current_player().name() << "...\n";
+  } else if (human.hand().size() <= 2 && !game.current_shouted_uno()) {
+    std::cout << " ¡Te quedan " << human.hand().size()
+              << " cartas! Grita UNO++ o robarás 2.\n";
   }
 }
 
@@ -110,8 +118,9 @@ bool HumanTurn(Game& game) {
   std::cout << " [0] - Abandonar partida.\n";
   std::cout << " [1] - Poner carta.\n";
   std::cout << " [2] - Coger carta.\n";
-  std::cout << " [3] - Debug options.\n";
-  const int option{AskInt("\n >>> ", 0, 3)};
+  std::cout << " [3] - Gritar UNO++.\n";
+  std::cout << " [4] - Debug options.\n";
+  const int option{AskInt("\n >>> ", 0, 4)};
 
   switch (option) {
     case 0:
@@ -146,6 +155,13 @@ bool HumanTurn(Game& game) {
       break;
 
     case 3:
+      if (!game.ShoutUno()) {
+        std::cout << "\n Solo puedes gritar UNO con 1 o 2 cartas.\n";
+        PressKey();
+      }
+      break;
+
+    case 4:
       RenderDebug(game);
       break;
 

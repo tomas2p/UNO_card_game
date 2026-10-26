@@ -15,6 +15,11 @@
 #include "card_pack_class.h"
 #include "player_class.h"
 
+// a player who plays down to one card without shouting UNO draws two cards
+inline bool NeedsUnoPenalty(std::size_t hand_size, bool shouted) {
+  return hand_size == 1 && !shouted;
+}
+
 // Game state and UNO rules; UI lives outside this class
 class Game {
  public:
@@ -35,12 +40,20 @@ class Game {
   bool over() const { return over_; }
   const std::string& winner() const { return winner_; }
   bool human_turn() const { return current_ == 0; }
+  bool current_shouted_uno() const {
+    return current_ < uno_shouted_.size() && uno_shouted_[current_];
+  }
 
   // actions of the current player
   bool CanPlay(std::size_t index) const;
   bool Play(std::size_t index, Color chosen_color = Color::Wild);
   void Draw();
   void AiTurn();
+  // shout UNO; only valid with one or two cards left
+  bool ShoutUno();
+
+  // take the message of the last action (empty when there is nothing to say)
+  std::string TakeNotice();
 
  private:
   void Start();
@@ -59,6 +72,9 @@ class Game {
   Color current_color_{Color::Red};
   bool over_{false};
   std::string winner_;
+  // whether each player has shouted UNO for their current one-card situation
+  std::vector<bool> uno_shouted_;
+  std::string notice_;
 };
 
 #endif
