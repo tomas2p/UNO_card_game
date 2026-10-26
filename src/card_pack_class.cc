@@ -97,6 +97,9 @@ std::string CardPack::Print(const int& width) {
 
 // print the game table (backcard and las card in pack)
 std::string CardPack::PrintGameTable() {
+  if (pack_.empty()) {
+    return "  (No hay cartas en la mesa)\n";
+  }
   std::string out;
   auto index{pack_.size() - 1};
   out.append("\t  ");

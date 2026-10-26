@@ -20,7 +20,7 @@
 
 int main() {
   // initialize things
-  int option;
+  int option{0};
   CardPack card_pack;
   CardPack card_pack_display;
 

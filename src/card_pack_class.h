@@ -53,7 +53,8 @@ class CardPack {
   bool Check(Card& card);
 
   // getters
-  int size() const { return kSize_; }
+  std::size_t size() const { return pack_.size(); }
+  bool empty() const { return pack_.empty(); }
   std::vector<Card> pack() const { return pack_; }
   std::vector<std::string> pack_color() const { return pack_color_; }
 

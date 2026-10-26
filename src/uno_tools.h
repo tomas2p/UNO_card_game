@@ -23,6 +23,9 @@ void Menu(int& option);
 // clear the terminal
 inline void Clear() { system("clear"); }
 
+// read an integer in [min, max]; exits cleanly on EOF
+int AskInt(const std::string& prompt, int min, int max);
+
 // wait until ENTER or SPACE keypressed
 void PressKey();
 

@@ -7,6 +7,8 @@
 
 #include "player_class.h"
 
+#include <limits>
+
 // constructor for online game
 Player::Player(const std::string& name, const std::string& ip,
                const int& port) {
@@ -36,16 +38,19 @@ void Player::CardGlobalToPlayerByIndex(CardPack& global_pack,
 
 // select the color for the special card
 int SpecialCardColorPicker() {
-  int option;
-  std::cout << "  - Color disponibles para cambiar:\n";
-  std::cout << "\t [1] - red\n\t [2] - blue\n\t [3] - green\n\t [4] - yellow\n";
-  std::cout << "\t >>> ";
-  std::cin >> option;
-  if (option < 1 || option > 4) {
-    std::cout << "Color invalido.";
-    SpecialCardColorPicker();
+  int option{0};
+  while (option < 1 || option > 4) {
+    std::cout << "  - Color disponibles para cambiar:\n";
+    std::cout << "\t [1] - red\n\t [2] - blue\n\t [3] - green\n\t [4] - yellow\n";
+    std::cout << "\t >>> " << std::flush;
+    if (!(std::cin >> option)) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    if (option < 1 || option > 4) {
+      std::cout << " Color inválido.\n";
+    }
   }
-  std::cout << option - 1;
   return (option - 1);
 }
 

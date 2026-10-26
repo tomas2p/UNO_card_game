@@ -53,7 +53,7 @@ class Player {
   std::vector<Card> card_pack_;
   std::vector<std::string> color_pack_;
   // turn of the player in game
-  int turn_;
+  int turn_{0};
 };
 
 #endif

@@ -7,6 +7,9 @@
 
 #include "uno_tools.h"
 
+#include <cstdlib>
+#include <limits>
+
 #include "card_pack_class.h"
 #include "player_class.h"
 
@@ -26,10 +29,37 @@ void ReadArt(const std::string& file_name, const int inicio, const int fin) {
   File.close();
 }
 
+// read an integer in [min, max]; returns min on EOF
+int AskInt(const std::string& prompt, int min, int max) {
+  int value;
+  while (true) {
+    std::cout << prompt << std::flush;
+    if (std::cin >> value) {
+      if (value >= min && value <= max) {
+        return value;
+      }
+      std::cout << " Valor fuera de rango.\n";
+    } else {
+      if (std::cin.eof()) {
+        std::exit(EXIT_SUCCESS);
+      }
+      std::cout << " Entrada inválida.\n";
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  }
+}
+
 // wait until ENTER or SPACE keypressed
 void PressKey() {
-  std::cout << " Presione ENTER para continuar... ";
-  while (getchar() != ' ' && getchar() != '\n') {
+  std::cout << " Presione ENTER para continuar... " << std::flush;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  int key{std::cin.get()};
+  while (key != '\n' && key != ' ' && key != EOF) {
+    key = std::cin.get();
+  }
+  if (key == EOF) {
+    std::cin.clear();
   }
 }
 
@@ -40,8 +70,7 @@ void Menu(int& option) {
   UnoLogo();
   // display menu options
   DisplayOptions();
-  std::cout << "\n >>> ";
-  std::cin >> option;
+  option = AskInt("\n >>> ", 0, 6);
 }
 
 // events
@@ -104,8 +133,7 @@ void EventSeeCardPack() {
     std::cout << " [0] - Volver atrás.\n";
     std::cout << " [1] - Baraja original.\n";
     std::cout << " [2] - Barajar (la baraja del juego es independiente).\n";
-    std::cout << "\n >>> ";
-    std::cin >> option;
+    option = AskInt("\n >>> ", 0, 2);
     switch (option) {
       case 0:  // finish event
         Clear();
@@ -129,7 +157,6 @@ void EventSeeCardPack() {
         break;
 
       default:
-        EventSeeCardPack();
         break;
     }
   } while (option != 0);
