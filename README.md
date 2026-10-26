@@ -1,6 +1,12 @@
-# UNO++ The Card Game
+<div align="center">
+  <a href="https://github.com/tomas2p/UNO_card_game">
+    <img src="docs/logo.svg" alt="UNO++ — The Card Game" width="680">
+  </a>
 
-[![CI](https://github.com/tomas2p/UNO_card_game/actions/workflows/ci.yml/badge.svg)](https://github.com/tomas2p/UNO_card_game/actions/workflows/ci.yml)
+  [![Versión](https://img.shields.io/github/v/release/tomas2p/UNO_card_game?style=for-the-badge&label=Versi%C3%B3n&logo=github&color=white)](https://github.com/tomas2p/UNO_card_game/releases)
+  [![CI](https://img.shields.io/github/actions/workflow/status/tomas2p/UNO_card_game/ci.yml?branch=main&style=for-the-badge&label=CI&logo=githubactions&logoColor=white)](https://github.com/tomas2p/UNO_card_game/actions/workflows/ci.yml)
+  [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)](https://isocpp.org/)
+</div>
 
 Juego de UNO para terminal escrito en C++17. Incluye baraja completa, turnos,
 cartas especiales, IA, sistema de gritar UNO y reciclado del mazo de descarte.
@@ -141,6 +147,7 @@ jugable, la opción `1` coge una del mazo.
 | `VERSION` | versión semántica actual |
 | `CHANGELOG.md` | historial de cambios por versión |
 | `resources/` | logo y textos por secciones |
+| `docs/logo.svg` | logo vectorial del README |
 | `tests/uno_test.cc` | pruebas sin dependencias externas |
 | `scripts/check_version.sh` | coherencia entre `VERSION`, changelog y tag |
 | `.github/workflows/ci.yml` | CI con gcc, clang, tests y artefacto |
