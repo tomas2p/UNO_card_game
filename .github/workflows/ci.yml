@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: gcc
+            cxx: g++
+          - name: clang
+            cxx: clang++
+    env:
+      CXXFLAGS: -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: make CXX=${{ matrix.cxx }}
+
+      - name: Run tests
+        run: make test CXX=${{ matrix.cxx }}
+
+      - name: Show version
+        run: ./game_uno++ --version
+
+      - name: Smoke test
+        run: printf '0\n' | ./game_uno++ > /dev/null
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: game_uno++-linux-${{ matrix.name }}
+          path: game_uno++
+          if-no-files-found: error
