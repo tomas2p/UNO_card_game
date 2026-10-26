@@ -10,6 +10,7 @@
 #include "uno_tools.h"
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
 

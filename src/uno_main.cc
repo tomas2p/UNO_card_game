@@ -9,10 +9,6 @@
  * @todo Online system: client/server connections
  */
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include "uno_tools.h"
 
 int main() {

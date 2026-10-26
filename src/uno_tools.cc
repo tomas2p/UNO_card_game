@@ -8,29 +8,44 @@
 #include "uno_tools.h"
 
 #include <cstdlib>
+#include <fstream>
 #include <limits>
+#include <string>
 
 #include "ansi_colors.h"
 #include "card_pack_class.h"
 #include "player_class.h"
 
-// read art from file resources.art (inicio line to fin line)
-void ReadArt(const std::string& file_name, const int inicio, const int fin) {
-  std::ifstream File(file_name);
-  std::string file_text;
-  for (int i{0}; i < inicio; ++i) {
-    getline(File, file_text);
+// print a section of file_name, delimited by "// section" markers
+void ReadArt(const std::string& file_name, const std::string& section) {
+  std::ifstream file(file_name);
+  if (!file) {
+    std::cerr << " No se pudo abrir " << file_name
+              << " (ejecuta el juego desde la raíz del proyecto)\n";
+    return;
+  }
+  const std::string marker{"// " + section};
+  std::string line;
+  bool found{false};
+  std::cout << '\n';
+  while (std::getline(file, line)) {
+    if (!found) {
+      found = (line == marker);
+      continue;
+    }
+    if (line.rfind("// ", 0) == 0) {
+      break;  // start of the next section
+    }
+    std::cout << line << '\n';
+  }
+  if (!found) {
+    std::cerr << " No se encontró la sección '" << section << "' en "
+              << file_name << '\n';
   }
   std::cout << '\n';
-  for (int i{inicio}; i < fin - 1; ++i) {
-    getline(File, file_text);
-    std::cout << file_text << '\n';
-  }
-  std::cout << '\n';
-  File.close();
 }
 
-// read an integer in [min, max]; returns min on EOF
+// read an integer in [min, max]; exits cleanly on EOF
 int AskInt(const std::string& prompt, int min, int max) {
   int value;
   while (true) {
@@ -75,17 +90,14 @@ void Menu(int& option) {
 }
 
 // events
-void EventFinish() { Clear(); }
+void EventFinish() {
+  Clear();
+  DisplayFinish();
+}
 
 void EventInfo() {
   Clear();
   DisplayInfo();
-  PressKey();
-}
-
-void EventOptions() {
-  Clear();
-  DisplayOptions();
   PressKey();
 }
 
@@ -108,7 +120,7 @@ void EventOnlineGame() {
 }
 
 // display SeeCardPack title
-void DisplaySeeCardPack() {
+static void DisplaySeeCardPack() {
   std::cout << ansi::bg_cyan << ansi::bold_black << " || " << ansi::reset << "\t\t\t\t\t\t\t\t " << ansi::bg_cyan
             << ansi::bold_black << " || " << ansi::reset << "\n";
   std::cout << ansi::bg_cyan << ansi::bold_black << "-++-" << ansi::reset

@@ -2,26 +2,25 @@
  * @author Tomás Pino Pérez
  * @brief Declarations of tools
  * @date 09-02-2023
- * @file uno_tool.h
+ * @file uno_tools.h
  */
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-
-// tools for Uno
 #ifndef UNO_TOOLS_H
 #define UNO_TOOLS_H
 
-// read art from file_name (inicio line to fin line)
-void ReadArt(const std::string& file_name, const int inicio, const int fin);
+#include <iostream>
+#include <string>
+
+// tools for Uno
+
+// print the content of a section of file_name (marker: "// section")
+void ReadArt(const std::string& file_name, const std::string& section);
 
 // manage menu of the game
 void Menu(int& option);
 
 // clear the terminal
-inline void Clear() { system("clear"); }
+inline void Clear() { std::cout << "\x1b[2J\x1b[H" << std::flush; }
 
 // read an integer in [min, max]; exits cleanly on EOF
 int AskInt(const std::string& prompt, int min, int max);
@@ -30,29 +29,28 @@ int AskInt(const std::string& prompt, int min, int max);
 void PressKey();
 
 // read uno logo
-inline void UnoLogo() { return ReadArt("resources/art.txt", 2, 12); }
+inline void UnoLogo() { ReadArt("resources/art.txt", "Uno Logo"); }
 
 // display credits
-inline void DisplayCredits() { return ReadArt("resources/texts.txt", 1, 7); }
+inline void DisplayCredits() { ReadArt("resources/texts.txt", "Display credits"); }
 // display information
-inline void DisplayInfo() { return ReadArt("resources/texts.txt", 7, 12); }
+inline void DisplayInfo() { ReadArt("resources/texts.txt", "Display info"); }
 // display options
-inline void DisplayOptions() { return ReadArt("resources/texts.txt", 12, 20); }
+inline void DisplayOptions() { ReadArt("resources/texts.txt", "Display options"); }
 // display finish game
-inline void DisplayFinish() { return ReadArt("resources/texts.txt", 20, 22); }
+inline void DisplayFinish() { ReadArt("resources/texts.txt", "Display finish"); }
 // display IA game
-inline void DisplayIAGame() { return ReadArt("resources/texts.txt", 22, 24); }
+inline void DisplayIAGame() { ReadArt("resources/texts.txt", "Display IA game"); }
 // display online game
 inline void DisplayOnlineGame() {
-  return ReadArt("resources/texts.txt", 24, 26);
+  ReadArt("resources/texts.txt", "Display online game");
 }
 // display rules
-inline void DisplayRules() { return ReadArt("resources/texts.txt", 26, 28); }
+inline void DisplayRules() { ReadArt("resources/texts.txt", "Display rules"); }
 
 // events
 void EventFinish();
 void EventInfo();
-void EventOptions();
 void EventRules();
 void EventCredits();
 void EventIAGame();

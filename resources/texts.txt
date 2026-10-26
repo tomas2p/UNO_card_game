@@ -2,7 +2,7 @@
   Autor:
     - Tomás Pino Pérez
     
-  Agradecimento:
+  Agradecimiento:
     - ChatGPT
 // Display info
  Aquí tienes algunos ajustes recomendados para usar el programa.
