@@ -14,7 +14,6 @@
 
 #include "ansi_colors.h"
 #include "card_pack_class.h"
-#include "player_class.h"
 
 // print a section of file_name, delimited by "// section" markers
 void ReadArt(const std::string& file_name, const std::string& section) {

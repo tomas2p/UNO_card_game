@@ -39,8 +39,6 @@ inline void DisplayInfo() { ReadArt("resources/texts.txt", "Display info"); }
 inline void DisplayOptions() { ReadArt("resources/texts.txt", "Display options"); }
 // display finish game
 inline void DisplayFinish() { ReadArt("resources/texts.txt", "Display finish"); }
-// display IA game
-inline void DisplayIAGame() { ReadArt("resources/texts.txt", "Display IA game"); }
 // display online game
 inline void DisplayOnlineGame() {
   ReadArt("resources/texts.txt", "Display online game");
