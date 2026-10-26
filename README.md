@@ -1,9 +1,10 @@
 <div align="center">
-  <a href="https://github.com/tomas2p/UNO_card_game">
+  <a href="https://tomas2p.vercel.app">
     <img src="docs/logo.svg" alt="UNO++ — The Card Game" width="680">
   </a>
 
   [![Versión](https://img.shields.io/github/v/release/tomas2p/UNO_card_game?style=for-the-badge&label=Versi%C3%B3n&logo=github&color=white)](https://github.com/tomas2p/UNO_card_game/releases)
+  [![Licencia](https://img.shields.io/badge/Licencia-GPL--3.0--or--later-blue?style=for-the-badge&logo=gnu&logoColor=white)](LICENSE)
   [![CI](https://img.shields.io/github/actions/workflow/status/tomas2p/UNO_card_game/ci.yml?branch=main&style=for-the-badge&label=CI&logo=githubactions&logoColor=white)](https://github.com/tomas2p/UNO_card_game/actions/workflows/ci.yml)
   [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)](https://isocpp.org/)
 </div>
@@ -146,6 +147,7 @@ jugable, la opción `1` coge una del mazo.
 | `src/version.h` | versión y commit mostrados por el binario |
 | `VERSION` | versión semántica actual |
 | `CHANGELOG.md` | historial de cambios por versión |
+| `LICENSE` | texto de la GPL-3.0-or-later |
 | `resources/` | logo y textos por secciones |
 | `docs/logo.svg` | logo ASCII del README |
 | `tests/uno_test.cc` | pruebas sin dependencias externas |
@@ -153,6 +155,14 @@ jugable, la opción `1` coge una del mazo.
 | `.github/workflows/ci.yml` | CI con gcc, clang, tests y artefacto |
 | `.github/workflows/release.yml` | release automático en tags `v*` |
 
+## Licencia
+
+Copyright (C) 2026 Tomás Pino Pérez.
+
+Este proyecto se distribuye bajo la **GNU General Public License v3.0 o
+posterior** (`GPL-3.0-or-later`). Consulta [LICENSE](LICENSE) para el texto
+completo.
+
 ## Autor
 
-Tomás Pino Pérez.
+Tomás Pino Pérez · [tomas2p.vercel.app](https://tomas2p.vercel.app)

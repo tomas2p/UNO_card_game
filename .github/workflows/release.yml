@@ -31,7 +31,7 @@ jobs:
           version="${GITHUB_REF_NAME#v}"
           name="uno++-${GITHUB_REF_NAME}-linux-x86_64"
           mkdir -p "dist/${name}"
-          cp game_uno++ README.md CHANGELOG.md VERSION "dist/${name}/"
+          cp game_uno++ README.md CHANGELOG.md VERSION LICENSE "dist/${name}/"
           cp -r resources "dist/${name}/"
           tar -C dist -czf "dist/${name}.tar.gz" "${name}"
           (cd dist && sha256sum "${name}.tar.gz" > "${name}.tar.gz.sha256")

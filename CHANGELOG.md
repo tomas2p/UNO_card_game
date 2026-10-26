@@ -7,6 +7,11 @@ y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Añadido
+
+- Licencia GPL-3.0-or-later.
+- Enlace al portfolio y firma `@tomas2p` en el logo del README.
+
 ## [1.0.0] - 2026-10-26
 
 Primera versión publicada: juego completo para un jugador contra la IA.
