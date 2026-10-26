@@ -1,20 +1,45 @@
-CC = g++
-CXXFLAGS = -std=c++17 -o
-SRC = src/
-OUT = game_uno++
-OBJ0 = ${SRC}card_class.cc
-OBJ1 = ${SRC}card_pack_class.cc
-OBJ2 = ${SRC}game_ia.cc
-OBJ3 = ${SRC}game_online.cc
-OBJ4 = ${SRC}player_class.cc
-OBJ5 = ${SRC}uno_main.cc
-OBJ6 = ${SRC}uno_tools.cc
-OBJ7 = ${SRC}game_class.cc
-OBJ = ${OBJ0} ${OBJ1} ${OBJ2} ${OBJ3} ${OBJ4} ${OBJ5} ${OBJ6} ${OBJ7}
+CXX ?= g++
+CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -Wpedantic
+CPPFLAGS ?= -Isrc
 
-all: ${OUT}
+TARGET := game_uno++
+BUILD_DIR := build
+SRC_DIR := src
+TEST_DIR := tests
 
-${OUT}:
-	${CC} ${CXXFLAGS} $@ ${OBJ}
+SOURCES := $(wildcard $(SRC_DIR)/*.cc)
+OBJECTS := $(patsubst $(SRC_DIR)/%.cc,$(BUILD_DIR)/%.o,$(SOURCES))
+DEPS := $(OBJECTS:.o=.d)
+
+TEST_SOURCES := $(TEST_DIR)/uno_test.cc \
+                $(SRC_DIR)/card_class.cc \
+                $(SRC_DIR)/card_pack_class.cc \
+                $(SRC_DIR)/player_class.cc \
+                $(SRC_DIR)/game_class.cc
+
+.PHONY: all clean run test
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cc | $(BUILD_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -MMD -MP -c $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $@
+
+run: $(TARGET)
+	./$(TARGET)
+
+test: $(BUILD_DIR)/uno_test
+	./$(BUILD_DIR)/uno_test
+
+$(BUILD_DIR)/uno_test: $(TEST_SOURCES) | $(BUILD_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TEST_SOURCES) -o $@
+
 clean:
-	rm -f ./${OUT}
+	rm -rf $(BUILD_DIR) $(TARGET)
+
+-include $(DEPS)

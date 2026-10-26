@@ -1,0 +1,12 @@
+# build artifacts
+build/
+game_uno++
+
+# test binary
+tests/uno_test
+
+# editor/OS noise
+*.o
+*.d
+*.out
+.DS_Store
