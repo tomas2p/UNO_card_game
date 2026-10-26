@@ -9,20 +9,15 @@
  * @todo Online system: client/server connections
  */
 
-#include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "card_pack_class.h"
-#include "player_class.h"
 #include "uno_tools.h"
 
 int main() {
-  // initialize things
+  // menu option
   int option{0};
-  CardPack card_pack;
-  CardPack card_pack_display;
 
   // menu logic
   do {

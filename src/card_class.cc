@@ -7,20 +7,36 @@
 
 #include "card_class.h"
 
-const std::array<std::string_view, 5> Card::kColors{BREDB, BBLUB, BGRNB,
-                                                     BYELB, BWHTB};
+#include <algorithm>
+
+#include "ansi_colors.h"
+
+const std::array<std::string_view, 5> Card::kColors{
+    ansi::bg_red, ansi::bg_blue, ansi::bg_green, ansi::bg_yellow, ansi::bg_white};
 
 const std::array<std::string_view, 15> Card::kTypes{
-    BBLK "00", BBLK "01", BBLK "02", BBLK "03", BBLK "04",
-    BBLK "05", BBLK "06", BBLK "07", BBLK "08", BBLK "09",
-    BBLK "+2", BBLK "><", BBLK "XX", BBLK "<>", BBLK "+4"};
+    "00", "01", "02", "03", "04", "05", "06", "07", "08",
+    "09", "+2", "><", "XX", "<>", "+4"};
 
 // constructor
 Card::Card(Color color, Type type) : color_{color}, type_{type} {}
 
 // print card
 std::string Card::Print() const {
-  return color_display() + ' ' + type_display() + ' ' + reset;
+  std::string out{color_display()};
+  out.append(" ");
+  out.append(type_display());
+  out.append(" ");
+  out.append(ansi::reset);
+  return out;
+}
+
+// colored band used as the top/bottom line of a card
+std::string Card::ColorLine() const {
+  std::string out{color_display()};
+  out.append("    ");
+  out.append(ansi::reset);
+  return out;
 }
 
 // operator<< overload
@@ -39,5 +55,31 @@ std::string Card::color_display() const {
 }
 
 std::string Card::type_display() const {
-  return std::string(kTypes[static_cast<std::size_t>(type_)]);
+  std::string out{ansi::bold_black};
+  out.append(kTypes[static_cast<std::size_t>(type_)]);
+  return out;
+}
+
+// format a group of cards, width cards per row
+std::string FormatCards(const std::vector<Card>& cards, std::size_t width) {
+  if (width == 0) {
+    return "";
+  }
+  std::string out;
+  for (std::size_t i{0}; i < cards.size(); i += width) {
+    const std::size_t end{std::min(i + width, cards.size())};
+    for (std::size_t j{i}; j < end; ++j) {
+      out.append(cards[j].ColorLine() + " ");
+    }
+    out.append("\n");
+    for (std::size_t j{i}; j < end; ++j) {
+      out.append(cards[j].Print() + " ");
+    }
+    out.append("\n");
+    for (std::size_t j{i}; j < end; ++j) {
+      out.append(cards[j].ColorLine() + " ");
+    }
+    out.append("\n\n");
+  }
+  return out;
 }

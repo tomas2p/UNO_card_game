@@ -13,8 +13,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
-
-#include "ANSI-color-codes.h"
+#include <vector>
 
 // Card colors; Wild is only used by <>, +4
 enum class Color { Red = 0, Blue, Green, Yellow, Wild };
@@ -51,6 +50,8 @@ class Card {
 
   // print card
   std::string Print() const;
+  // colored band used as the top/bottom line of a card
+  std::string ColorLine() const;
 
   // getters
   Color color() const { return color_; }
@@ -71,5 +72,8 @@ class Card {
   Color color_;
   Type type_;
 };
+
+// format a group of cards, width cards per row
+std::string FormatCards(const std::vector<Card>& cards, std::size_t width);
 
 #endif

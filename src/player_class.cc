@@ -7,40 +7,17 @@
 
 #include "player_class.h"
 
+#include <iostream>
 #include <limits>
+#include <utility>
 
-// constructor for online game
-Player::Player(const std::string& name, const std::string& ip,
-               const int& port) {
-  name_ = name;
-  ip_ = ip;
-  port_ = port;
-}
-// constructor for ia game
-Player::Player(const std::string& name) {
-  name_ = name;
-}
-
-// put card from global_card_pack to player_card_pack
-void Player::CardGlobalToPlayerByIndex(CardPack& global_pack,
-                                       const int& index) {
-  // the line of the card with type and color
-  card_pack_.reserve(7);
-  card_pack_.push_back(global_pack.pack()[index]);
-
-  // the line of the card with color
-  color_pack_.reserve(7);
-  color_pack_.push_back(global_pack.pack_color()[index]);
-
-  // erase the card from the global_pack
-  global_pack.erase(index);
-}
+namespace {
 
 // select the color for the special card
 Color SpecialCardColorPicker() {
   int option{0};
   while (option < 1 || option > 4) {
-    std::cout << "  - Color disponibles para cambiar:\n";
+    std::cout << "  - Colores disponibles para cambiar:\n";
     std::cout << "\t [1] - red\n\t [2] - blue\n\t [3] - green\n\t [4] - yellow\n";
     std::cout << "\t >>> " << std::flush;
     if (!(std::cin >> option)) {
@@ -54,44 +31,33 @@ Color SpecialCardColorPicker() {
   return static_cast<Color>(option - 1);
 }
 
+}  // namespace
+
+// constructor for online game
+Player::Player(std::string name, std::string ip, int port)
+    : name_{std::move(name)}, ip_{std::move(ip)}, port_{port} {}
+
+// constructor for ia game
+Player::Player(std::string name) : name_{std::move(name)} {}
+
+// put card from global_card_pack to player_card_pack
+void Player::CardGlobalToPlayerByIndex(CardPack& global_pack,
+                                       std::size_t index) {
+  hand_.push_back(global_pack[index]);
+  global_pack.erase(index);
+}
+
 // put card from player_card_pack to global_card_pack
 void Player::CardPlayerToGlobalByIndex(CardPack& global_pack,
-                                       const int& index) {
-  if (card_pack_[index].color() == Color::Wild) {
-    card_pack_[index].color(SpecialCardColorPicker());
-    color_pack_[index] = card_pack_[index].color_display() + "    " + reset;
+                                       std::size_t index) {
+  if (hand_[index].color() == Color::Wild) {
+    hand_[index].color(SpecialCardColorPicker());
   }
-  // append card to global card_pack
-  global_pack.push_back(card_pack_[index], color_pack_[index]);
-
-  // erase the value_card from player and put on global
-  card_pack_.erase(card_pack_.begin() + index);
-
-  // erase the color_card from player and put on global
-  color_pack_.erase(color_pack_.begin() + index);
+  global_pack.push_back(hand_[index]);
+  hand_.erase(index);
 }
 
 // print the card_pack
-std::string Player::Print(const std::size_t width) {
-  if (width == 0) {
-    return "";
-  }
-  std::string out;
-  for (std::size_t i{0}; i < card_pack_.size() && i < color_pack_.size();
-       i += width) {
-    for (std::size_t j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
-      out.append(color_pack_[j] + " ");
-    }
-    out.append("\n");
-    for (std::size_t j{i}; (j < i + width) && (j < card_pack_.size()); ++j) {
-      out.append(card_pack_[j].Print());
-      out.append(" ");
-    }
-    out.append("\n");
-    for (std::size_t j{i}; (j < i + width) && (j < color_pack_.size()); ++j) {
-      out.append(color_pack_[j] + " ");
-    }
-    out.append("\n\n");
-  }
-  return out;
+std::string Player::Print(std::size_t width) const {
+  return FormatCards(hand_.pack(), width);
 }

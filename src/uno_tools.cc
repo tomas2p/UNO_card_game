@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <limits>
 
+#include "ansi_colors.h"
 #include "card_pack_class.h"
 #include "player_class.h"
 
@@ -108,19 +109,19 @@ void EventOnlineGame() {
 
 // display SeeCardPack title
 void DisplaySeeCardPack() {
-  std::cout << BCYNB << BBLK << " || " << reset << "\t\t\t\t\t\t\t\t " << BCYNB
-            << BBLK << " || " << reset << "\n";
-  std::cout << BCYNB << BBLK << "-++-" << reset
+  std::cout << ansi::bg_cyan << ansi::bold_black << " || " << ansi::reset << "\t\t\t\t\t\t\t\t " << ansi::bg_cyan
+            << ansi::bold_black << " || " << ansi::reset << "\n";
+  std::cout << ansi::bg_cyan << ansi::bold_black << "-++-" << ansi::reset
             << "\t  Mira la baraja de cartas con las que vas a jugar\t "
-            << BCYNB << BBLK << "-++-" << reset << "\n";
-  std::cout << BCYNB << BBLK << " || " << reset << "\t\t\t\t\t\t\t\t " << BCYNB
-            << BBLK << " || " << reset << "\n\n";
+            << ansi::bg_cyan << ansi::bold_black << "-++-" << ansi::reset << "\n";
+  std::cout << ansi::bg_cyan << ansi::bold_black << " || " << ansi::reset << "\t\t\t\t\t\t\t\t " << ansi::bg_cyan
+            << ansi::bold_black << " || " << ansi::reset << "\n\n";
 }
 void EventSeeCardPack() {
   // initialize variables
-  int option;
-  CardPack card_pack;
-  CardPack card_pack_shuffle;
+  int option{0};
+  CardPack card_pack{CardPack::FullDeck()};
+  CardPack card_pack_shuffle{CardPack::FullDeck()};
 
   // menu logic
   do {

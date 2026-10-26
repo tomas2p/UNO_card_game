@@ -26,8 +26,10 @@ void GameConfigurations(int& num_players, std::string& name_human) {
 }
 
 // get the position of the card in the card_pack
-int CardIndex(const int& hand_size) {
-  return AskInt("  - Posición de la carta (desde 1): ", 1, hand_size) - 1;
+std::size_t CardIndex(std::size_t hand_size) {
+  const int max{static_cast<int>(hand_size)};
+  return static_cast<std::size_t>(
+      AskInt("  - Posición de la carta (desde 1): ", 1, max) - 1);
 }
 
 // event IA game secuence
@@ -41,12 +43,11 @@ void EventIAGame() {
   GameConfigurations(num_players, name_human);
 
   // card_pack to shuffle and give to players
-  CardPack card_pack;
+  CardPack card_pack{CardPack::FullDeck()};
   card_pack.ShufflePack();  // shuffle it
 
   // game_card_pack
   CardPack game_card_pack;
-  game_card_pack.clear();  // clear it
 
   // create players human[0] and IAs[1+]
   std::vector<Player> players;
@@ -65,14 +66,12 @@ void EventIAGame() {
 
   // give the game_card_pack the first number card to play with
   std::size_t first_card{0};
-  std::vector<Card> initial_pack{card_pack.pack()};
-  while (first_card < initial_pack.size() &&
-         initial_pack[first_card].type() > Type::Nine) {
+  while (first_card < card_pack.size() &&
+         card_pack[first_card].type() > Type::Nine) {
     ++first_card;
   }
-  game_card_pack.push_back(initial_pack[first_card],
-                           card_pack.pack_color()[first_card]);
-  card_pack.erase(static_cast<int>(first_card));
+  game_card_pack.push_back(card_pack[first_card]);
+  card_pack.erase(first_card);
 
   // vector with the order turns by player name
   std::vector<std::string> players_name;
@@ -115,7 +114,7 @@ void EventIAGame() {
     option = AskInt("\n >>> ", 0, 4);
 
     // card_index initialization
-    int card_index;
+    std::size_t card_index{0};
     // case 1 loop checker
     bool is_card_valid{false};
 
@@ -126,15 +125,15 @@ void EventIAGame() {
 
       case 1:  // put index card - 1 from player to game_card_pack
         std::cout << "\n Vas a poner una carta en el mazo de juego\n";
-        if (players[0].card_pack().empty()) {
+        if (players[0].hand().empty()) {
           std::cout << "\n No tienes cartas para poner.\n";
           PressKey();
           break;
         }
         while (!is_card_valid) {
-          card_index = CardIndex(players[0].card_pack().size());
-          Card card{players[0].card_pack()[card_index]};
-          if (game_card_pack.Check(card)) {
+          card_index = CardIndex(players[0].hand().size());
+          Card card{players[0].hand()[card_index]};
+          if (game_card_pack.CanPlay(card)) {
             const bool is_reverse{card.type() == Type::Reverse};
             players[0].CardPlayerToGlobalByIndex(game_card_pack, card_index);
             if (is_reverse) {
