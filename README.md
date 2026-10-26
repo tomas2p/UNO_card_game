@@ -147,7 +147,7 @@ jugable, la opción `1` coge una del mazo.
 | `VERSION` | versión semántica actual |
 | `CHANGELOG.md` | historial de cambios por versión |
 | `resources/` | logo y textos por secciones |
-| `docs/logo.svg` | logo vectorial del README |
+| `docs/logo.svg` | logo ASCII del README |
 | `tests/uno_test.cc` | pruebas sin dependencias externas |
 | `scripts/check_version.sh` | coherencia entre `VERSION`, changelog y tag |
 | `.github/workflows/ci.yml` | CI con gcc, clang, tests y artefacto |

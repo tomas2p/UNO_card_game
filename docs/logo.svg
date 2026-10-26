@@ -1,52 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 200" width="680" height="200" role="img" aria-labelledby="logo-title logo-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 240" width="680" height="240" role="img" aria-labelledby="logo-title logo-desc">
   <title id="logo-title">UNO++ — The Card Game</title>
-  <desc id="logo-desc">Logo de UNO++, un juego de cartas para terminal escrito en C++17.</desc>
+  <desc id="logo-desc">Logo ASCII de UNO++, el mismo que muestra el juego en la terminal.</desc>
 
   <defs>
     <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#182030"/>
       <stop offset="1" stop-color="#0d1117"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#ef4444"/>
-      <stop offset="1" stop-color="#f59e0b"/>
-    </linearGradient>
-    <clipPath id="wild-pinwheel">
-      <ellipse cx="48" cy="58" rx="29" ry="39"/>
+    <clipPath id="panel-clip">
+      <rect x="1" y="1" width="678" height="238" rx="20"/>
     </clipPath>
-    <filter id="card-shadow" x="-30%" y="-20%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
-    </filter>
   </defs>
 
-  <rect x="1" y="1" width="678" height="198" rx="24" fill="url(#panel)" stroke="#2b3446" stroke-width="2"/>
+  <rect x="1" y="1" width="678" height="238" rx="20" fill="url(#panel)" stroke="#2b3446" stroke-width="2"/>
 
-  <!-- wild card -->
-  <g transform="translate(58 34) rotate(-8 48 66)" filter="url(#card-shadow)">
-    <rect width="96" height="132" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
-    <ellipse cx="48" cy="58" rx="30" ry="40" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
-    <g clip-path="url(#wild-pinwheel)">
-      <rect x="19" y="18" width="29" height="40" fill="#ef4444"/>
-      <rect x="48" y="18" width="29" height="40" fill="#3b82f6"/>
-      <rect x="19" y="58" width="29" height="40" fill="#22c55e"/>
-      <rect x="48" y="58" width="29" height="40" fill="#f59e0b"/>
-    </g>
-    <text x="48" y="124" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif" font-size="20" font-weight="bold" fill="#0f172a">+4</text>
-  </g>
+  <!-- terminal title bar -->
+  <circle cx="28" cy="21" r="5" fill="#ff5f56"/>
+  <circle cx="46" cy="21" r="5" fill="#ffbd2e"/>
+  <circle cx="64" cy="21" r="5" fill="#27c93f"/>
+  <text x="340.0" y="26" text-anchor="middle" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" letter-spacing="2" fill="#6b7688">UNO++ · THE CARD GAME</text>
+  <line x1="1" y1="42" x2="679" y2="42" stroke="#2b3446" stroke-width="1"/>
 
-  <!-- wordmark -->
-  <text x="197" y="104" font-family="Verdana, DejaVu Sans, sans-serif" font-size="84" font-weight="bold" letter-spacing="-2">
-    <tspan fill="#f8fafc">UNO</tspan><tspan fill="url(#accent)" dx="6">++</tspan>
+  <!-- ASCII logo, from resources/art.txt -->
+  <text x="87" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="15" fill="#e6edf3" xml:space="preserve" style="white-space: pre">
+    <tspan x="87">  /$$   /$$  /$$   /$$   /$$$$$$</tspan>
+    <tspan x="87" dy="18"> | $$  | $$ | $$$ | $$  /$$__  $$     /$$        /$$</tspan>
+    <tspan x="87" dy="18"> | $$  | $$ | $$$$| $$ | $$  \ $$    | $$       | $$</tspan>
+    <tspan x="87" dy="18"> | $$  | $$ | $$ $$ $$ | $$  | $$  /$$$$$$$$  /$$$$$$$$</tspan>
+    <tspan x="87" dy="18"> | $$  | $$ | $$  $$$$ | $$  | $$ |__  $$__/ |__  $$__/</tspan>
+    <tspan x="87" dy="18"> | $$  | $$ | $$\  $$$ | $$  | $$    | $$       | $$</tspan>
+    <tspan x="87" dy="18"> |  $$$$$$/ | $$ \  $$ |  $$$$$$/    |__/       |__/</tspan>
+    <tspan x="87" dy="18">  \______/  |__/  \__/  \______/</tspan>
   </text>
 
-  <!-- uno colors -->
-  <g>
-    <rect x="197" y="124" width="92" height="6" rx="3" fill="#ef4444"/>
-    <rect x="293" y="124" width="92" height="6" rx="3" fill="#3b82f6"/>
-    <rect x="389" y="124" width="92" height="6" rx="3" fill="#22c55e"/>
-    <rect x="485" y="124" width="92" height="6" rx="3" fill="#f59e0b"/>
+  <!-- UNO colors, clipped to the panel -->
+  <g clip-path="url(#panel-clip)">
+    <rect x="0" y="234" width="170" height="6" fill="#ef4444"/>
+    <rect x="170" y="234" width="170" height="6" fill="#3b82f6"/>
+    <rect x="340" y="234" width="170" height="6" fill="#22c55e"/>
+    <rect x="510" y="234" width="170" height="6" fill="#f59e0b"/>
   </g>
-
-  <text x="198" y="152" font-family="Verdana, DejaVu Sans, sans-serif" font-size="16" font-weight="bold" letter-spacing="5" fill="#94a3b8">THE CARD GAME</text>
-  <text x="199" y="176" font-family="Verdana, DejaVu Sans, sans-serif" font-size="12" letter-spacing="3" fill="#6b7688">C++17  ·  TERMINAL  ·  IA</text>
 </svg>
