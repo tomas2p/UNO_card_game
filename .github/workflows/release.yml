@@ -9,10 +9,10 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Validate tag, VERSION and CHANGELOG
         run: sh scripts/check_version.sh "${GITHUB_REF_NAME}"

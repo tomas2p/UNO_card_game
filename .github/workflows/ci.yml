@@ -12,7 +12,7 @@ permissions:
 jobs:
   build-and-test:
     name: ${{ matrix.name }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -25,7 +25,7 @@ jobs:
       CXXFLAGS: -std=c++17 -O2 -Wall -Wextra -Wpedantic -Werror
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check version and changelog
         run: make check-version
@@ -43,7 +43,7 @@ jobs:
         run: printf '0\n' | ./game_uno++ > /dev/null
 
       - name: Upload executable
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: game_uno++-linux-${{ matrix.name }}
           path: game_uno++

@@ -1,47 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 240" width="680" height="240" role="img" aria-labelledby="logo-title logo-desc">
-  <title id="logo-title">UNO++ — The Card Game</title>
-  <desc id="logo-desc">Logo ASCII de UNO++, el mismo que muestra el juego en la terminal.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="215" viewBox="0 0 680 215" role="img" aria-labelledby="banner-title">
+  <title id="banner-title">UNO++ — The Card Game</title>
+  <style>
+    .fg { fill: #24292f; }
+    .accent { fill: #bf8700; }
 
-  <defs>
-    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#182030"/>
-      <stop offset="1" stop-color="#0d1117"/>
-    </linearGradient>
-    <clipPath id="panel-clip">
-      <rect x="1" y="1" width="678" height="238" rx="20"/>
-    </clipPath>
-  </defs>
+    @media (prefers-color-scheme: dark) {
+      .fg { fill: #e6edf3; }
+      .accent { fill: #e3b341; }
+    }
 
-  <rect x="1" y="1" width="678" height="238" rx="20" fill="url(#panel)" stroke="#2b3446" stroke-width="2"/>
+    text {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 16px;
+      white-space: pre;
+    }
 
-  <!-- terminal title bar -->
-  <circle cx="28" cy="21" r="5" fill="#ff5f56"/>
-  <circle cx="46" cy="21" r="5" fill="#ffbd2e"/>
-  <circle cx="64" cy="21" r="5" fill="#27c93f"/>
-  <text x="340.0" y="26" text-anchor="middle" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" letter-spacing="2" fill="#6b7688">UNO++ · THE CARD GAME</text>
+    .handle {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  </style>
+
+  <text class="fg" x="70" y="32" xml:space="preserve">  /$$   /$$  /$$   /$$   /$$$$$$</text>
+  <text class="fg" x="70" y="51" xml:space="preserve"> | $$  | $$ | $$$ | $$  /$$__  $$     /$$        /$$</text>
+  <text class="fg" x="70" y="70" xml:space="preserve"> | $$  | $$ | $$$$| $$ | $$  \ $$    | $$       | $$</text>
+  <text class="fg" x="70" y="89" xml:space="preserve"> | $$  | $$ | $$ $$ $$ | $$  | $$  /$$$$$$$$  /$$$$$$$$</text>
+  <text class="fg" x="70" y="108" xml:space="preserve"> | $$  | $$ | $$  $$$$ | $$  | $$ |__  $$__/ |__  $$__/</text>
+  <text class="fg" x="70" y="127" xml:space="preserve"> | $$  | $$ | $$\  $$$ | $$  | $$    | $$       | $$</text>
+  <text class="fg" x="70" y="146" xml:space="preserve"> |  $$$$$$/ | $$ \  $$ |  $$$$$$/    |__/       |__/</text>
+  <text class="fg" x="70" y="165" xml:space="preserve">  \______/  |__/  \__/  \______/</text>
+
   <a href="https://tomas2p.vercel.app" target="_blank">
     <title>Portfolio de @tomas2p</title>
-    <text x="652" y="26" text-anchor="end" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="11" letter-spacing="1" fill="#94a3b8" text-decoration="underline">@tomas2p</text>
+    <text class="accent handle" x="340" y="201" text-anchor="middle">@tomas2p</text>
   </a>
-  <line x1="1" y1="42" x2="679" y2="42" stroke="#2b3446" stroke-width="1"/>
-
-  <!-- ASCII logo, from resources/art.txt -->
-  <text x="87" y="80" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-size="15" fill="#e6edf3" xml:space="preserve" style="white-space: pre">
-    <tspan x="87">  /$$   /$$  /$$   /$$   /$$$$$$</tspan>
-    <tspan x="87" dy="18"> | $$  | $$ | $$$ | $$  /$$__  $$     /$$        /$$</tspan>
-    <tspan x="87" dy="18"> | $$  | $$ | $$$$| $$ | $$  \ $$    | $$       | $$</tspan>
-    <tspan x="87" dy="18"> | $$  | $$ | $$ $$ $$ | $$  | $$  /$$$$$$$$  /$$$$$$$$</tspan>
-    <tspan x="87" dy="18"> | $$  | $$ | $$  $$$$ | $$  | $$ |__  $$__/ |__  $$__/</tspan>
-    <tspan x="87" dy="18"> | $$  | $$ | $$\  $$$ | $$  | $$    | $$       | $$</tspan>
-    <tspan x="87" dy="18"> |  $$$$$$/ | $$ \  $$ |  $$$$$$/    |__/       |__/</tspan>
-    <tspan x="87" dy="18">  \______/  |__/  \__/  \______/</tspan>
-  </text>
-
-  <!-- UNO colors, clipped to the panel -->
-  <g clip-path="url(#panel-clip)">
-    <rect x="0" y="234" width="170" height="6" fill="#ef4444"/>
-    <rect x="170" y="234" width="170" height="6" fill="#3b82f6"/>
-    <rect x="340" y="234" width="170" height="6" fill="#22c55e"/>
-    <rect x="510" y="234" width="170" height="6" fill="#f59e0b"/>
-  </g>
 </svg>
