@@ -87,21 +87,28 @@ void TestFullDeck() {
 }
 
 void TestCanPlay() {
-  CardPack discard;
-  discard.push_back(Card(Color::Red, Type::Five));
+  const Card red_five{Color::Red, Type::Five};
+  const Card red_nine{Color::Red, Type::Nine};
+  const Card blue_five{Color::Blue, Type::Five};
+  const Card blue_nine{Color::Blue, Type::Nine};
+  const Card wild{Color::Wild, Type::Wild};
+  const Card wild_four{Color::Wild, Type::WildDrawFour};
 
-  Check(discard.CanPlay(Card(Color::Red, Type::Nine)),
+  Check(IsPlayable(red_nine, Type::Five, Color::Red, false),
         "same color is playable");
-  Check(discard.CanPlay(Card(Color::Blue, Type::Five)),
+  Check(IsPlayable(blue_five, Type::Five, Color::Red, false),
         "same type is playable");
-  Check(discard.CanPlay(Card(Color::Wild, Type::Wild)),
+  Check(IsPlayable(wild, Type::Five, Color::Red, true),
         "wild card is always playable");
-  Check(!discard.CanPlay(Card(Color::Blue, Type::Nine)),
+  Check(!IsPlayable(blue_nine, Type::Five, Color::Red, false),
         "different color and type is not playable");
+  Check(IsPlayable(red_five, Type::Wild, Color::Red, true),
+        "color still matches after a wild card");
 
-  const CardPack empty;
-  Check(!empty.CanPlay(Card(Color::Red, Type::Five)),
-        "nothing is playable on an empty pile");
+  Check(IsPlayable(wild_four, Type::Five, Color::Red, false),
+        "+4 is playable without cards of the current color");
+  Check(!IsPlayable(wild_four, Type::Five, Color::Red, true),
+        "+4 is not playable while holding the current color");
 }
 
 void TestPlayer() {

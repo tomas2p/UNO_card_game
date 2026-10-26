@@ -82,17 +82,3 @@ void CardPack::ShufflePack() {
   static std::mt19937 rgn{std::random_device{}()};
   std::shuffle(pack_.begin(), pack_.end(), rgn);
 }
-
-// check if the card to put is valid
-bool CardPack::CanPlay(const Card& card) const {
-  if (pack_.empty()) {
-    return false;
-  }
-  if (pack_.back().type() == card.type()) {
-    return true;
-  }
-  if (pack_.back().color() == card.color()) {
-    return true;
-  }
-  return card.color() == Color::Wild;
-}

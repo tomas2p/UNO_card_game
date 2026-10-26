@@ -79,4 +79,9 @@ std::string FormatCards(const std::vector<Card>& cards, std::size_t width);
 // human-readable color name
 std::string ColorName(Color color);
 
+// whether `card` can be played on a pile whose top card is `top_type` with
+// `current_color`; a +4 is only legal when the hand has no card of that color
+bool IsPlayable(const Card& card, Type top_type, Color current_color,
+                bool hand_has_current_color);
+
 #endif

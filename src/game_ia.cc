@@ -113,6 +113,16 @@ void RenderDebug(const Game& game) {
   PressKey();
 }
 
+// true when the current player has at least one legal card
+bool HasPlayable(const Game& game) {
+  for (std::size_t i{0}; i < game.current_player().hand().size(); ++i) {
+    if (game.CanPlay(i)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // one human action; returns false when the player abandons
 bool HumanTurn(Game& game) {
   std::cout << " [0] - Abandonar partida.\n";
@@ -134,12 +144,24 @@ bool HumanTurn(Game& game) {
         break;
       }
       std::size_t index{0};
+      if (!HasPlayable(game)) {
+        std::cout << "\n No tienes cartas jugables: coges una del mazo.\n";
+        game.Draw();
+        PressKey();
+        break;
+      }
       while (true) {
         index = CardIndex(hand_size);
         if (game.CanPlay(index)) {
           break;
         }
-        std::cout << "\n No es una carta válida, prueba otra.\n\n";
+        std::cout << "\n No es una carta válida, prueba otra.\n";
+        if (game.current_player().hand()[index].type() ==
+            Type::WildDrawFour) {
+          std::cout << " El +4 solo se puede jugar si no tienes cartas del"
+                       " color actual.\n";
+        }
+        std::cout << '\n';
       }
       Color color{Color::Wild};
       if (game.current_player().hand()[index].color() == Color::Wild) {

@@ -65,13 +65,10 @@ bool Game::CanPlay(std::size_t index) const {
     return false;
   }
   const Card& card{hand[index]};
-  if (card.color() == Color::Wild) {
-    return true;
-  }
-  if (card.type() == discard_.top().type()) {
-    return true;
-  }
-  return card.color() == current_color_;
+  const bool hand_has_color{std::any_of(
+      hand.pack().begin(), hand.pack().end(),
+      [this](const Card& held) { return held.color() == current_color_; })};
+  return IsPlayable(card, discard_.top().type(), current_color_, hand_has_color);
 }
 
 // play the card at index and apply its effect

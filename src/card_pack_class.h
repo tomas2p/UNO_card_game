@@ -41,9 +41,6 @@ class CardPack {
   // print the game table (backcard and last card in pack)
   std::string PrintGameTable() const;
 
-  // check if card to put is valid
-  bool CanPlay(const Card& card) const;
-
   // getters
   std::size_t size() const { return pack_.size(); }
   bool empty() const { return pack_.empty(); }
