@@ -24,7 +24,9 @@
 // Display rules
   Objetivo: quedarte sin cartas.
   - Juega una carta del mismo color o tipo que la de la mesa.
-  - Los comodines siempre se pueden jugar y eligen color.
+  - Los comodines <> siempre se pueden jugar y eligen color.
+  - El +4 solo se puede jugar si no tienes cartas del color actual.
   - +2 y +4 hacen robar al siguiente jugador y le saltan el turno.
   - Reversa cambia el sentido; bloqueo salta un turno.
+  - Grita UNO++ con 1 o 2 cartas; si bajas a una sin gritar, robas 2.
   - Si no puedes jugar, coge una carta del mazo.
